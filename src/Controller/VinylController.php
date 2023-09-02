@@ -20,6 +20,7 @@ class VinylController extends AbstractController
             ['song' => 'On Bended Knee', 'artist' => 'Boyz II Men'],
             ['song' => 'Fantasy', 'artist' => 'Mariah Carey'],
         ];
+        dump($tracks);
 
         return $this->render('vinyl/homepage.html.twig', [
             'title' => "Vilyl mix",
@@ -27,17 +28,17 @@ class VinylController extends AbstractController
         ]);
     }
 
-    #[Route('/browse/{slug}')]
+    #[Route('/browse/{slug}', name: 'browse_genre')]
     public function browse(string $slug = null): Response
     {
         if ($slug) {
-            $title = "Genre: " . SFString\u(str_replace('-', ' ', $slug))->title();
+            $genre = "Genre: " . SFString\u(str_replace('-', ' ', $slug))->title();
         } else {
-            $title = "All Genres";
+            $genre = "All Genres";
         }
 
         return $this->render('vinyl/browse.html.twig', [
-            'title' => $title,
+            'genre' => $genre,
         ]);
     }
 }
