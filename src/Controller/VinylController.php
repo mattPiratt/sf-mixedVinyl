@@ -9,7 +9,7 @@ use Symfony\Component\String as SFString;
 
 class VinylController extends AbstractController
 {
-    #[Route('/', name: 'app_vinyl')]
+    #[Route('/', name: 'app_homepage')]
     public function homepage(): Response
     {
         $tracks = [
@@ -28,7 +28,7 @@ class VinylController extends AbstractController
         ]);
     }
 
-    #[Route('/browse/{slug}', name: 'browse_genre')]
+    #[Route('/browse/{slug}', name: 'app_browse_genre')]
     public function browse(string $slug = null): Response
     {
         if ($slug) {

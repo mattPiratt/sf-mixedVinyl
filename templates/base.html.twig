@@ -42,7 +42,9 @@ rel="stylesheet" href="{{asset('styles/app.css')}}">
 <!-- Main Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark  mb-5" style="background-color: #27333A;">
 	<div class="container-fluid">
-		<a class="navbar-brand" href="#">
+<a class="navbar-brand" href="{{path('app_homepage')}}">
+
+
 			<i class="fas fa-record-vinyl"></i>
 			Mixed Vinyl
 		</a>
@@ -52,7 +54,8 @@ rel="stylesheet" href="{{asset('styles/app.css')}}">
 		<div class="collapse navbar-collapse d-flex justify-content-end" id="navbarNavDropdown">
 			<ul class="navbar-nav">
 				<li class="nav-item">
-					<a class="nav-link" style="margin-top: 20px;" href="{{ path('browse_genre') }}">Browse Mixes</a>
+<a class="nav-link" style="margin-top: 20px;" href="{{ path('app_browse_genre') }}">Browse Mixes</a>
+
 				</li>
 				<!-- Not Authenticated -->
 				<!-- <li class="nav-item"><button href="#" class="btn btn-primary btn-sm">Login</button></li> -->
