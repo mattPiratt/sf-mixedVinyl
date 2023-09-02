@@ -10,9 +10,21 @@ use Symfony\Component\String as SFString;
 class VinylController extends AbstractController
 {
     #[Route('/', name: 'app_vinyl')]
-    public function index(): Response
+    public function homepage(): Response
     {
-        return new Response('Welcome to your new controller!');
+        $tracks = [
+            ['song' => 'Gangsta\'s Paradise', 'artist' => 'Coolio'],
+            ['song' => 'Waterfalls', 'artist' => 'TLC'],
+            ['song' => 'Creep', 'artist' => 'Radiohead'],
+            ['song' => 'Kiss from a Rose', 'artist' => 'Seal'],
+            ['song' => 'On Bended Knee', 'artist' => 'Boyz II Men'],
+            ['song' => 'Fantasy', 'artist' => 'Mariah Carey'],
+        ];
+
+        return $this->render('vinyl/homepage.html.twig', [
+            'title' => "Vilyl mix",
+            'tracks' => $tracks,
+        ]);
     }
 
     #[Route('/browse/{slug}')]
@@ -24,6 +36,8 @@ class VinylController extends AbstractController
             $title = "All Genres";
         }
 
-        return new Response($title);
+        return $this->render('vinyl/browse.html.twig', [
+            'title' => $title,
+        ]);
     }
 }

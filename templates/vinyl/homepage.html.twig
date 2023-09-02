@@ -1,0 +1,21 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Homepage -
+	{{ parent() }}
+{% endblock %}
+
+{% block body %}
+	<h1>{{title}}</h1>
+	<p>Our sweet homepage</p>
+
+	<ul>
+		{% for track in tracks %}
+			<li>
+				<b>{{track.song}}</b>
+				-
+				<i>{{track.artist|upper}}</i>
+			</li>
+		{% endfor %}
+	</ul>
+{% endblock %}
+
