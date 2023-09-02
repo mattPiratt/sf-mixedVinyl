@@ -6,11 +6,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String as SFString;
+use Twig\Environment;
 
 class VinylController extends AbstractController
 {
     #[Route('/', name: 'app_homepage')]
-    public function homepage(): Response
+    public function homepage(Environment $twig): Response
     {
         $tracks = [
             ['song' => 'Gangsta\'s Paradise', 'artist' => 'Coolio'],
@@ -22,10 +23,10 @@ class VinylController extends AbstractController
         ];
         dump($tracks);
 
-        return $this->render('vinyl/homepage.html.twig', [
+        return new Response($twig->render('vinyl/homepage.html.twig', [
             'title' => "Vilyl mix",
             'tracks' => $tracks,
-        ]);
+        ]));
     }
 
     #[Route('/browse/{slug}', name: 'app_browse_genre')]
