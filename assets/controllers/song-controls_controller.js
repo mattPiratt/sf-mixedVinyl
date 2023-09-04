@@ -20,7 +20,7 @@ export default class extends Controller {
     };
 
     play(event) {
-        event.preventDefaults;
+        event.preventDefault();
 
         axios.get(this.infoUrlValue).then((response) => {
             console.log(response);
