@@ -3,13 +3,17 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Cache\CacheItem;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String as SFString;
+use Symfony\Contracts\Cache\CacheInterface;
 use Twig\Environment;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class VinylController extends AbstractController
 {
+
     #[Route('/', name: 'app_homepage')]
     public function homepage(Environment $twig): Response
     {
@@ -21,7 +25,6 @@ class VinylController extends AbstractController
             ['song' => 'On Bended Knee', 'artist' => 'Boyz II Men'],
             ['song' => 'Fantasy', 'artist' => 'Mariah Carey'],
         ];
-        dump($tracks);
 
         return new Response($twig->render('vinyl/homepage.html.twig', [
             'title' => "PB & Jams",
@@ -29,15 +32,25 @@ class VinylController extends AbstractController
         ]));
     }
 
-    #[Route('/browse/{slug}', name: 'app_browse_genre')]
-    public function browse(string $slug = null): Response
+    #[Route('/browse/{slug?}', name: 'app_browse_genre')]
+    public function browse(string $slug = null, CacheInterface $cache, HttpClientInterface $httpClient): Response
     {
         if ($slug) {
             $genre = "Genre: " . SFString\u(str_replace('-', ' ', $slug))->title();
         } else {
             $genre = "All Genres";
         }
-        $mixes = $this->getMixes();
+
+        $mixes = $cache->get('mixesFromGithub', function (CacheItem $cacheItem) use ($httpClient) {
+            $cacheItem->expiresAfter(50);
+            $response = $httpClient->request(
+                'GET',
+                'https://raw.githubusercontent.com/SymfonyCasts/vinyl-mixes/main/mixes.json'
+            );
+            return $response->toArray();
+        });
+
+        
 
         return $this->render('vinyl/browse.html.twig', [
             'genre' => $genre,
@@ -45,28 +58,4 @@ class VinylController extends AbstractController
         ]);
     }
 
-    private function getMixes(): array
-    {
-        // temporary fake "mixes" data
-        return [
-            [
-                'title' => 'PB & Jams',
-                'trackCount' => 14,
-                'genre' => 'Rock',
-                'createdAt' => new \DateTime('2021-10-02'),
-            ],
-            [
-                'title' => 'Put a Hex on your Ex',
-                'trackCount' => 8,
-                'genre' => 'Heavy Metal',
-                'createdAt' => new \DateTime('2022-04-28'),
-            ],
-            [
-                'title' => 'Spice Grills - Summer Tunes',
-                'trackCount' => 10,
-                'genre' => 'Pop',
-                'createdAt' => new \DateTime('2019-06-20'),
-            ],
-        ];
-    }
 }
