@@ -51,10 +51,11 @@ class GenVinylmixCommand extends Command
         for ($i = 0; $i < $amount; $i++) {
             $entity = new VinylMix();
 
+            $genres = ['pop', 'rock', 'heavy-metal'];
             $entity
                 ->setTitle("Random title nr {$i}")
                 ->setDescription(ByteString::fromRandom(99)->toString())
-                ->setGenre('pop')
+                ->setGenre($genres[array_rand($genres)])
                 ->setTrackCount(rand(5, 15))
                 ->setVotes(rand(-50, 50));
             $this->entityManagerInterface->persist($entity);

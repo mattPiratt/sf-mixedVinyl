@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\VinylMix;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -16,9 +17,36 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class VinylMixRepository extends ServiceEntityRepository
 {
+    const ALIAS = "mix";
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, VinylMix::class);
+    }
+
+    public function findByGenreOrderByVotes($genre = null)
+    {
+        $qb = $this->createQueryBuilderWithVotesOrder();
+
+        if ($genre !== null) {
+            $qb
+                ->andWhere(self::ALIAS . '.genre = :genre')
+                ->setParameter("genre", $genre);
+        }
+        return $qb
+            ->getQuery()
+            ->getResult();
+    }
+
+    private function createQueryBuilderWithVotesOrder(QueryBuilder $queryBuilder = null): QueryBuilder
+    {
+        if (null === $queryBuilder) {
+            $queryBuilder = $this->createQueryBuilder(self::ALIAS);
+        }
+
+        $queryBuilder->orderBy(self::ALIAS . '.votes', "DESC");
+
+        return $queryBuilder;
     }
 
 //    /**

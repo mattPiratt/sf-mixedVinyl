@@ -51,7 +51,7 @@ class VinylController extends AbstractController
 
         /** @var VinylMixRepository mixesEntity */
         $mixesEntity = $entityManager->getRepository(VinylMix::class);
-        $mixes = $mixesEntity->findBy([], ['votes' => 'DESC']);
+        $mixes = $mixesEntity->findByGenreOrderByVotes($slug);
 
         return $this->render('vinyl/browse.html.twig', [
             'genre' => $genre,
