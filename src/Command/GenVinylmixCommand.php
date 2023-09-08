@@ -54,7 +54,7 @@ class GenVinylmixCommand extends Command
             $genres = ['pop', 'rock', 'heavy-metal'];
             $entity
                 ->setTitle("Random title nr {$i}")
-                ->setDescription(ByteString::fromRandom(99)->toString())
+            ->setDescription(ByteString::fromRandom(99, "abcdefg ")->toString())
                 ->setGenre($genres[array_rand($genres)])
                 ->setTrackCount(rand(5, 15))
                 ->setVotes(rand(-50, 50));

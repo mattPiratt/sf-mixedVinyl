@@ -28,6 +28,9 @@
         <div class="row">
             {% for mix in mixes %}
             <div class="col col-md-4">
+<a href="{{ path('app_individual_mix',{id: mix.id} ) }}">
+
+
                 <div class="mixed-vinyl-container p-3 text-center">
 <img src="{{mix.imageUrl(300)}}" data-src="{{mix.imageUrl(300)}}" alt="Square placeholder img">
 
@@ -44,6 +47,9 @@
 
 
                 </div>
+</a>
+
+
             </div>
             {% endfor %}
         </div>

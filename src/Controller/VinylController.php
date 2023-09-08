@@ -14,6 +14,7 @@ use Symfony\Contracts\Cache\CacheInterface;
 use Twig\Environment;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use App\Repository\VinylMixRepository;
+use Symfony\Component\HttpFoundation\Request;
 
 class VinylController extends AbstractController
 {
@@ -59,5 +60,50 @@ class VinylController extends AbstractController
             'mixes' => $mixes,
         ]);
     }
+
+    #[Route('/mix/{id}', name: 'app_individual_mix')]
+    public function show(
+        int $id,
+        VinylMixRepository $vinylMixRepository,
+    ): Response {
+
+        $mix = $vinylMixRepository->find($id);
+
+        if (!$mix) {
+            throw $this->createNotFoundException("Mix not found in DB");
+        }
+
+        $tracks = [
+            ['song' => 'Gangsta\'s Paradise', 'artist' => 'Coolio'],
+            ['song' => 'Waterfalls', 'artist' => 'TLC'],
+            ['song' => 'Creep', 'artist' => 'Radiohead'],
+            ['song' => 'Kiss from a Rose', 'artist' => 'Seal'],
+            ['song' => 'On Bended Knee', 'artist' => 'Boyz II Men'],
+            ['song' => 'Fantasy', 'artist' => 'Mariah Carey'],
+        ];
+        return $this->render('mix/show.html.twig', [
+            'mix' => $mix,
+            'tracks' => $tracks,
+        ]);
+    }
+
+    #[Route('/mix/{id}/vote', name: 'vote_action', methods: ['POST'])]
+    public function vote(
+        VinylMix $vinylMix,
+        Request $request,
+        EntityManagerInterface $entityManagerInterface,
+    ): Response {
+        match ($request->request->get('direction', 'up')) {
+            "up" => $vinylMix->upVote(),
+            "down" => $vinylMix->downVotes()
+        };
+
+        $entityManagerInterface->flush();
+
+        $this->addFlash('success', "Vote has been saved!");
+
+        return $this->redirectToRoute('app_individual_mix', ['id' => $vinylMix->getId()]);
+    }
+
 
 }
