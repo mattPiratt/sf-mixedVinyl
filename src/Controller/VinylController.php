@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\VinylMix;
 use App\Service\MixRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Cache\CacheItem;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,6 +13,7 @@ use Symfony\Component\String as SFString;
 use Symfony\Contracts\Cache\CacheInterface;
 use Twig\Environment;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use App\Repository\VinylMixRepository;
 
 class VinylController extends AbstractController
 {
@@ -34,17 +37,26 @@ class VinylController extends AbstractController
     }
 
     #[Route('/browse/{slug?}', name: 'app_browse_genre')]
-    public function browse(string $slug = null, MixRepository $mixRepository): Response
+    public function browse(
+        EntityManagerInterface $entityManager,
+        string $slug = null,
+        MixRepository $mixRepository
+    ): Response
     {
         if ($slug) {
             $genre = "Genre: " . SFString\u(str_replace('-', ' ', $slug))->title();
         } else {
             $genre = "All Genres";
-        }     
+        }
+
+        /** @var VinylMixRepository mixesEntity */
+        $mixesEntity = $entityManager->getRepository(VinylMix::class);
+        $mixes = $mixesEntity->findBy([], ['votes' => 'DESC']);
 
         return $this->render('vinyl/browse.html.twig', [
             'genre' => $genre,
-            'mixes' => $mixRepository->getAll(),
+            // 'mixes' => $mixRepository->getAll(),
+            'mixes' => $mixes,
         ]);
     }
 
