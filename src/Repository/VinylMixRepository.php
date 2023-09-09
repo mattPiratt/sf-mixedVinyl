@@ -24,7 +24,7 @@ class VinylMixRepository extends ServiceEntityRepository
         parent::__construct($registry, VinylMix::class);
     }
 
-    public function findByGenreOrderByVotes($genre = null)
+    public function createOrderByVotesQueryBuilder($genre = null): QueryBuilder
     {
         $qb = $this->createQueryBuilderWithVotesOrder();
 
@@ -33,9 +33,7 @@ class VinylMixRepository extends ServiceEntityRepository
                 ->andWhere(self::ALIAS . '.genre = :genre')
                 ->setParameter("genre", $genre);
         }
-        return $qb
-            ->getQuery()
-            ->getResult();
+        return $qb;
     }
 
     private function createQueryBuilderWithVotesOrder(QueryBuilder $queryBuilder = null): QueryBuilder
@@ -49,28 +47,28 @@ class VinylMixRepository extends ServiceEntityRepository
         return $queryBuilder;
     }
 
-//    /**
-//     * @return VinylMix[] Returns an array of VinylMix objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('v')
-//            ->andWhere('v.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('v.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    //    /**
+    //     * @return VinylMix[] Returns an array of VinylMix objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('v')
+    //            ->andWhere('v.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('v.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
 
-//    public function findOneBySomeField($value): ?VinylMix
-//    {
-//        return $this->createQueryBuilder('v')
-//            ->andWhere('v.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    //    public function findOneBySomeField($value): ?VinylMix
+    //    {
+    //        return $this->createQueryBuilder('v')
+    //            ->andWhere('v.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }

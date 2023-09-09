@@ -14,6 +14,8 @@ use Symfony\Contracts\Cache\CacheInterface;
 use Twig\Environment;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use App\Repository\VinylMixRepository;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
+use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 
 class VinylController extends AbstractController
@@ -41,7 +43,8 @@ class VinylController extends AbstractController
     public function browse(
         EntityManagerInterface $entityManager,
         string $slug = null,
-        MixRepository $mixRepository
+        MixRepository $mixRepository,
+        Request $request,
     ): Response {
         if ($slug) {
             $genre = "Genre: " . SFString\u(str_replace('-', ' ', $slug))->title();
@@ -51,12 +54,18 @@ class VinylController extends AbstractController
 
         /** @var VinylMixRepository mixesEntity */
         $mixesEntity = $entityManager->getRepository(VinylMix::class);
-        $mixes = $mixesEntity->findByGenreOrderByVotes($slug);
+        $qb = $mixesEntity->createOrderByVotesQueryBuilder($slug);
+        $adapter = new QueryAdapter($qb);
+        $pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage(
+            $adapter,
+            $request->get('page', 1),
+            9
+        );
 
         return $this->render('vinyl/browse.html.twig', [
             'genre' => $genre,
             // 'mixes' => $mixRepository->getAll(),
-            'mixes' => $mixes,
+            'pager' => $pagerfanta,
         ]);
     }
 
