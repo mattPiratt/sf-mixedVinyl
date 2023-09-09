@@ -34,7 +34,8 @@
         "symfony/maker-bundle": "^1.50",
         "symfony/monolog-bundle": "^3.0",
         "symfony/stopwatch": "6.3.*",
-        "symfony/web-profiler-bundle": "6.3.*"
+        "symfony/web-profiler-bundle": "6.3.*",
+        "zenstruck/foundry": "^1.35"
     },
     "config": {
         "allow-plugins": {
