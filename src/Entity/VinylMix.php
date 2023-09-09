@@ -34,6 +34,7 @@ class VinylMix
     private int $votes = 0;
 
     #[ORM\Column(length: 100, unique: true)]
+    #[Slug(fields: ['title'])]
     private ?string $slug = null;
 
     public function __construct()
@@ -132,4 +133,18 @@ class VinylMix
             $width
         );
     }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    
 }

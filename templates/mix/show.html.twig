@@ -20,9 +20,8 @@
 
 				</h2>
 				<p>{{mix.description}}</p>
-				{{mix.votesString}}
-				votes
-				<form action="{{ path('vote_action',{id: mix.id}) }}" method="POST">
+				<span>{{mix.votesString}}votes</span>
+				<form action="{{ path('vote_action',{slug: mix.slug}) }}" method="POST">
 					<button type="submit" class="btn btn-outline-primary" name="direction" value="up">
 						<span class="fa fa-thumbs-up"></span>
 					</button>
@@ -34,4 +33,3 @@
 		</div>
 	</div>
 {% endblock %}
-

@@ -42,8 +42,7 @@ class VinylController extends AbstractController
         EntityManagerInterface $entityManager,
         string $slug = null,
         MixRepository $mixRepository
-    ): Response
-    {
+    ): Response {
         if ($slug) {
             $genre = "Genre: " . SFString\u(str_replace('-', ' ', $slug))->title();
         } else {
@@ -61,13 +60,13 @@ class VinylController extends AbstractController
         ]);
     }
 
-    #[Route('/mix/{id}', name: 'app_individual_mix')]
+    #[Route('/mix/{slug}', name: 'app_individual_mix')]
     public function show(
-        int $id,
+        string $slug,
         VinylMixRepository $vinylMixRepository,
     ): Response {
 
-        $mix = $vinylMixRepository->find($id);
+        $mix = $vinylMixRepository->findOneBy(['slug' => $slug]);
 
         if (!$mix) {
             throw $this->createNotFoundException("Mix not found in DB");
@@ -87,7 +86,7 @@ class VinylController extends AbstractController
         ]);
     }
 
-    #[Route('/mix/{id}/vote', name: 'vote_action', methods: ['POST'])]
+    #[Route('/mix/{slug}/vote', name: 'vote_action', methods: ['POST'])]
     public function vote(
         VinylMix $vinylMix,
         Request $request,
@@ -102,8 +101,6 @@ class VinylController extends AbstractController
 
         $this->addFlash('success', "Vote has been saved!");
 
-        return $this->redirectToRoute('app_individual_mix', ['id' => $vinylMix->getId()]);
+        return $this->redirectToRoute('app_individual_mix', ['slug' => $vinylMix->getSlug()]);
     }
-
-
 }
