@@ -145,6 +145,4 @@ class VinylMix
 
         return $this;
     }
-
-    
 }
