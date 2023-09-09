@@ -1,58 +1,53 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="container">
-    <h1>Browse {{genre ?? 'All Genres' }}</h1>
+	<div class="container">
+		<h1>Browse
+			{{genre ?? 'All Genres' }}</h1>
 
-    <h2 class="mt-5 mb-4">Filter by Genre</h2>
-    <ul class="genre-list ps-0 mt-2 mb-3">
-        <li class="d-inline">
-            <a class="btn btn-primary btn-sm" href="{{ path('app_browse_genre', {
-                slug: 'pop'
-            }) }}">Pop</a>
-        </li>
-        <li class="d-inline">
-            <a class="btn btn-primary btn-sm" href="{{ path('app_browse_genre', {
-                slug: 'rock'
-            }) }}">Rock</a>
-        </li>
-        <li class="d-inline">
-            <a class="btn btn-primary btn-sm" href="{{ path('app_browse_genre', {
-                slug: 'heavy-metal'
-            }) }}">Heavy Metal</a>
-        </li>
-    </ul>
+		<h2 class="mt-5 mb-4">Filter by Genre</h2>
+		<ul class="genre-list ps-0 mt-2 mb-3">
+			<li class="d-inline">
+				<a class="btn btn-primary btn-sm" href="{{ path('app_browse_genre', { slug: 'pop' }) }}">Pop</a>
+			</li>
+			<li class="d-inline">
+				<a class="btn btn-primary btn-sm" href="{{ path('app_browse_genre', { slug: 'rock' }) }}">Rock</a>
+			</li>
+			<li class="d-inline">
+				<a class="btn btn-primary btn-sm" href="{{ path('app_browse_genre', { slug: 'heavy-metal' }) }}">Heavy Metal</a>
+			</li>
+		</ul>
 
-    <div>
-        <h2 class="mt-5">Mixes</h2>
-        <div class="row">
-            {% for mix in mixes %}
-            <div class="col col-md-4">
-<a href="{{ path('app_individual_mix',{id: mix.id} ) }}">
+		<div>
+			<h2 class="mt-5">Mixes</h2>
+			<div class="row">
+				{% for mix in mixes %}
+					<div class="col col-md-4">
+						<a href="{{ path('app_individual_mix',{id: mix.id} ) }}">
 
 
-                <div class="mixed-vinyl-container p-3 text-center">
-<img src="{{mix.imageUrl(300)}}" data-src="{{mix.imageUrl(300)}}" alt="Square placeholder img">
+							<div class="mixed-vinyl-container p-3 text-center">
+								<img src="{{mix.imageUrl(300)}}" data-src="{{mix.imageUrl(300)}}" alt="Square placeholder img">
 
 
-                    <p class="mt-2"><strong>{{ mix.title }}</strong></p>
-                    <span>{{ mix.trackCount }} Tracks</span>
-                    |
-                    <span>{{ mix.genre }}</span>
-                    |
-                    <span>{{ mix.createdAt|ago }}</span>
-<br>
-<span>{{mix.votesString}}
-	votes</span>
+								<p class="mt-2">
+									<strong>{{ mix.title }}</strong>
+								</p>
+								<span>{{ mix.trackCount }}
+									Tracks</span>
+								|
+								<span>{{ mix.genre }}</span>
+								|
+								<span>{{ mix.createdAt|ago }}</span>
+								<br>
+								<span>{{mix.votesString}}
+									votes</span>
+							</div>
+						</a>
 
-
-                </div>
-</a>
-
-
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
 {% endblock %}
